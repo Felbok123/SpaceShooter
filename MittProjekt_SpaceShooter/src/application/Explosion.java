@@ -1,44 +1,38 @@
 package application;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
-public class Explosion extends AnimationBuild {
+class Explosion extends AnimationBuild {
 
-	public Explosion(Pane pane, SpriteBuild sprite, Image[] sequence, double durationMs) {
+    Explosion(Pane pane, SpriteBuild sprite, Image[] sequence, double durationMs) {
 
-		super(sequence, durationMs);
+        super(sequence, durationMs);
 
-		relocateAnimationTo(sprite);
+        relocateAnimationTo(sprite);
 
-		pane.getChildren().add(getView());
+        pane.getChildren().add(getView());
 
-		setOnFinished(new EventHandler<ActionEvent>() {
+        setOnFinished(event -> {
 
-			@Override
-			public void handle(ActionEvent event) {
+            if (!sprite.isAlive())
 
-				if (!sprite.isAlive())
-					
-					sprite.setRemovable(true);
+                sprite.setRemovable(true);
 
-				stop();
+            stop();
 
-				pane.getChildren().remove(getView());
+            pane.getChildren().remove(getView());
 
-			}
-		});
+        });
 
-	}
+    }
 
-	// create explosion at sprite location
-	public void relocateAnimationTo(SpriteBuild sprite) {
+    // create explosion at sprite location
+    private void relocateAnimationTo(SpriteBuild sprite) {
 
-		getView().relocate(sprite.getX() - getView().getImage().getWidth() / 3.6,
-				sprite.getY() - getView().getImage().getHeight() / 2.5);
+        getView().relocate(sprite.getX() - getView().getImage().getWidth() / 3.6,
+                sprite.getY() - getView().getImage().getHeight() / 2.5);
 
-	}
+    }
 
 }

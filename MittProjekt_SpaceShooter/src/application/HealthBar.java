@@ -7,35 +7,35 @@ import javafx.scene.shape.StrokeType;
 
 public class HealthBar extends Pane {
 
-	Rectangle outerHealth;
-	Rectangle innerHealth;
+    private Rectangle outerHealth;
+    private Rectangle innerHealth;
 
-	public HealthBar() {
+    HealthBar() {
 
-		float height = 15;
+        float height = 15;
 
-		float outerWidth = 120;
-		float innerWidth = 80;
+        float outerWidth = 120;
+        float innerWidth = 80;
 
-		float x = 0;
-		float y = 0;
+        float x = 0;
+        float y = 0;
 
-		outerHealth = new Rectangle(x, y, outerWidth, height);
-		outerHealth.setStroke(Color.BLACK);
-		outerHealth.setStrokeWidth(4);
-		outerHealth.setStrokeType(StrokeType.OUTSIDE);
-		outerHealth.setFill(Color.RED);
+        outerHealth = new Rectangle(x, y, outerWidth, height);
+        outerHealth.setStroke(Color.BLACK);
+        outerHealth.setStrokeWidth(4);
+        outerHealth.setStrokeType(StrokeType.OUTSIDE);
+        outerHealth.setFill(Color.RED);
 
-		innerHealth = new Rectangle(x, y, innerWidth, height);
-		innerHealth.setStrokeType(StrokeType.OUTSIDE);
-		innerHealth.setFill(Color.LIME);
+        innerHealth = new Rectangle(x, y, innerWidth, height);
+        innerHealth.setStrokeType(StrokeType.OUTSIDE);
+        innerHealth.setFill(Color.LIME);
 
-		getChildren().addAll(outerHealth, innerHealth);
+        getChildren().addAll(outerHealth, innerHealth);
 
-	}
+    }
 
-	public void setValue(double value) {
-		innerHealth.setWidth(outerHealth.getWidth() * value);
-	}
+    public void setValue(double value) {
+        innerHealth.setWidth(outerHealth.getWidth() * value);
+    }
 
 }

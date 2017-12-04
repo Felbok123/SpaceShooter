@@ -34,790 +34,781 @@ import javafx.stage.StageStyle;
 
 public class StartGame extends Application {
 
-	private Stage thisStage;
-	private Scene mainScene;
-	private AnimationTimer gameLoop;
-	private boolean gamePause = false;
-	private Random rnd;
-
-	private Pane statsField;
-	private Pane playField;
-	private Pane lowerDustField;
-	private Pane upperDustField;
-	private Pane bulletField;
-	private Pane backgroundField;
-
-	private Image playerShip;
-	private Image enemyShip;
-	private Image enemyShip2;
-	private Image enemyShip3;
-	private Image enemyShip4;
-	private Image backgroundImage;
-	private Image starDust[];
-	private Image playerBullet;
-	private Image[] explosionSeq;
-
-	private Player player;
-	private Input input;
-	private Stats stats;
-	private ScoreManager manageScore;
-
-	private Group gameGroup;
-
-	private int score;
-
-	private List<Stats> statList;
-	private List<Background> backgroundList;
-	private List<Enemy> enemyList;
-	private List<StarDust> starList;
-	private List<Player> playerList;
-	private List<Bullet> bulletList;
-
-	@Override
-	public void start(Stage primaryStage) {
-
-		try {
-			thisStage = primaryStage;
-			mainScene = createMenu();
-			thisStage.setScene(mainScene);
-			thisStage.initStyle(StageStyle.UNDECORATED);
-			thisStage.show();
-			manageScore = new ScoreManager();
-			manageScore.loadFile();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	private Scene createMenu() {
-
-		Group root = new Group();
-		Scene menuScene = new Scene(root, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
-		ImageView view = new ImageView(getClass().getResource("/images/space650x800y.jpg").toExternalForm());
-
-		GridPane gPane = new GridPane();
-		gPane.setPadding(new Insets(100, 5, 0, 95));
-		gPane.setVgap(5);
-
-		Font font = new Font("Verdana", 40);
-
-		Text title = new Text("Space Shooter");
-
-		title.setFill(Color.DARKKHAKI);
-		title.setStroke(Color.BLACK);
-		title.setEffect(new Glow(100));
-		title.setFont(Font.font("Verdana", FontWeight.BOLD, 60));
-		Text newGame = new Text("New game");
-		Text controls = new Text("Controls");
-		Text highScore = new Text("High score");
-		Text exit = new Text("Exit Game");
-		newGame.setFont(font);
-		newGame.setFill(Color.CHOCOLATE);
-		controls.setFont(font);
-		controls.setFill(Color.CHOCOLATE);
-		highScore.setFont(font);
-		highScore.setFill(Color.CHOCOLATE);
-		exit.setFont(font);
-		exit.setFill(Color.CHOCOLATE);
-		changeColor(exit);
-		changeColor(highScore);
-		changeColor(controls);
-		changeColor(newGame);
-
-		VBox meny = new VBox();
-		meny.setSpacing(30);
-		meny.setAlignment(Pos.CENTER);
-		meny.getChildren().addAll(newGame, highScore, controls, exit);
-		gPane.add(title, 6, 13);
-		gPane.add(meny, 6, 20);
+    private Stage thisStage;
+    private Scene mainScene;
+    private AnimationTimer gameLoop;
+    private boolean gamePause = false;
+    private Random rnd;
+
+    private Pane statsField;
+    private Pane playField;
+    private Pane lowerDustField;
+    private Pane upperDustField;
+    private Pane bulletField;
+    private Pane backgroundField;
+
+    private Image playerShip;
+    private Image enemyShip;
+    private Image enemyShip2;
+    private Image enemyShip3;
+    private Image enemyShip4;
+    private Image backgroundImage;
+    private Image starDust[];
+    private Image playerBullet;
+    private Image[] explosionSeq;
+
+    private Player player;
+    private Input input;
+    private Stats stats;
+    private ScoreManager manageScore;
+
+    private Group gameGroup;
+
+    private int score;
+
+    private List<Stats> statList;
+    private List<Background> backgroundList;
+    private List<Enemy> enemyList;
+    private List<StarDust> starList;
+    private List<Player> playerList;
+    private List<Bullet> bulletList;
+
+    @Override
+    public void start(Stage primaryStage) {
+
+        try {
+            thisStage = primaryStage;
+            mainScene = createMenu();
+            thisStage.setScene(mainScene);
+            thisStage.initStyle(StageStyle.UNDECORATED);
+            thisStage.show();
+            manageScore = new ScoreManager();
+            manageScore.loadFile();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private Scene createMenu() {
+
+        Group root = new Group();
+        Scene menuScene = new Scene(root, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
+        ImageView view = new ImageView(getClass().getResource("/images/space650x800y.jpg").toExternalForm());
+
+        GridPane gPane = new GridPane();
+        gPane.setPadding(new Insets(100, 5, 0, 95));
+        gPane.setVgap(5);
+
+        Font font = new Font("Verdana", 40);
+
+        Text title = new Text("Space Shooter");
+
+        title.setFill(Color.DARKKHAKI);
+        title.setStroke(Color.BLACK);
+        title.setEffect(new Glow(100));
+        title.setFont(Font.font("Verdana", FontWeight.BOLD, 60));
+        Text newGame = new Text("New game");
+        Text controls = new Text("Controls");
+        Text highScore = new Text("High score");
+        Text exit = new Text("Exit Game");
+        newGame.setFont(font);
+        newGame.setFill(Color.CHOCOLATE);
+        controls.setFont(font);
+        controls.setFill(Color.CHOCOLATE);
+        highScore.setFont(font);
+        highScore.setFill(Color.CHOCOLATE);
+        exit.setFont(font);
+        exit.setFill(Color.CHOCOLATE);
+        changeColor(exit);
+        changeColor(highScore);
+        changeColor(controls);
+        changeColor(newGame);
+
+        VBox meny = new VBox();
+        meny.setSpacing(30);
+        meny.setAlignment(Pos.CENTER);
+        meny.getChildren().addAll(newGame, highScore, controls, exit);
+        gPane.add(title, 6, 13);
+        gPane.add(meny, 6, 20);
+
+        newGame.setOnMousePressed(e -> {
 
-		newGame.setOnMousePressed(e -> {
+            mainScene = createGame();
+            thisStage.setScene(mainScene);
 
-			mainScene = createGame();
-			thisStage.setScene(mainScene);
+        });
 
-		});
+        highScore.setOnMousePressed(e -> {
+            mainScene = createHighScore();
+            thisStage.setScene(mainScene);
 
-		highScore.setOnMousePressed(e -> {
-			mainScene = createHighScore();
-			thisStage.setScene(mainScene);
+        });
 
-		});
+        exit.setOnMousePressed(e -> Platform.exit());
 
-		exit.setOnMousePressed(e -> {
+        controls.setOnMousePressed(e -> {
+            mainScene = createControls();
+            thisStage.setScene(mainScene);
 
-			Platform.exit();
+        });
 
-		});
+        root.getChildren().add(view);
+        root.getChildren().addAll(gPane);
 
-		controls.setOnMousePressed(e -> {
-			mainScene = createControls();
-			thisStage.setScene(mainScene);
+        return menuScene;
 
-		});
+    }
 
-		root.getChildren().add(view);
-		root.getChildren().addAll(gPane);
+    private void changeColor(Text text) {
+        text.setOnMouseEntered(e -> text.setFill(Color.BURLYWOOD));
+        text.setOnMouseExited(e -> text.setFill(Color.CHOCOLATE));
 
-		return menuScene;
+    }
 
-	}
+    private Scene createControls() {
+        BorderPane root = new BorderPane();
+        Scene controlScene = new Scene(root, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
+        ImageView view = new ImageView(getClass().getResource("/images/space650x800y.jpg").toExternalForm());
+        Font font = new Font("Verdana", 40);
 
-	private void changeColor(Text text) {
-		text.setOnMouseEntered(e -> {
-			text.setFill(Color.BURLYWOOD);
+        Text back = new Text("Go Back");
+        Text startGame = new Text("Start Game");
+        Text cont = new Text();
 
-		});
-		text.setOnMouseExited(e -> {
-			text.setFill(Color.CHOCOLATE);
-		});
+        VBox vbox = new VBox(50);
 
-	}
+        startGame.setFont(font);
+        startGame.setFill(Color.CHOCOLATE);
+        changeColor(startGame);
+        back.setFont(font);
+        back.setFill(Color.CHOCOLATE);
+        changeColor(back);
 
-	private Scene createControls() {
-		BorderPane root = new BorderPane();
-		Scene controlScene = new Scene(root, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
-		ImageView view = new ImageView(getClass().getResource("/images/space650x800y.jpg").toExternalForm());
-		Font font = new Font("Verdana", 40);
+        cont.setFont(Font.font("Impact", FontWeight.BOLD, 20));
+        cont.setFill(Color.DEEPSKYBLUE);
 
-		Text back = new Text("Go Back");
-		Text startGame = new Text("Start Game");
-		Text cont = new Text();
+        cont.setText("  Hi and welcome to space shooter your objective " + "\n" + "  is to shoot ships and get points"
+                + "\n" + "  to move the ship forward press W " + "\n" + "  to move the ship down press S" + "\n"
+                + "  to move it to either side use the A for left and D for right" + "\n"
+                + "  to shoot press the space bar" + "\n" + "  to pause the game press P and to exit press ESC");
 
-		VBox vbox = new VBox(50);
+        back.setOnMousePressed(e -> {
+            mainScene = createMenu();
+            thisStage.setScene(mainScene);
 
-		startGame.setFont(font);
-		startGame.setFill(Color.CHOCOLATE);
-		changeColor(startGame);
-		back.setFont(font);
-		back.setFill(Color.CHOCOLATE);
-		changeColor(back);
+        });
 
-		cont.setFont(Font.font("Impact", FontWeight.BOLD, 20));
-		cont.setFill(Color.DEEPSKYBLUE);
+        startGame.setOnMousePressed(e -> {
+            mainScene = createGame();
+            thisStage.setScene(mainScene);
 
-		cont.setText("  Hi and welcome to space shooter your objective " + "\n" + "  is to shoot ships and get points"
-				+ "\n" + "  to move the ship forward press W " + "\n" + "  to move the ship down press S" + "\n"
-				+ "  to move it to either side use the A for left and D for right" + "\n"
-				+ "  to shoot press the space bar" + "\n" + "  to pause the game press P and to exit press ESC");
+        });
 
-		back.setOnMousePressed(e -> {
-			mainScene = createMenu();
-			thisStage.setScene(mainScene);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.getChildren().addAll(cont, startGame, back);
 
-		});
+        cont.setTextAlignment(TextAlignment.CENTER);
+        root.getChildren().add(view);
+        root.setCenter(vbox);
 
-		startGame.setOnMousePressed(e -> {
-			mainScene = createGame();
-			thisStage.setScene(mainScene);
+        return controlScene;
 
-		});
+    }
 
-		vbox.setAlignment(Pos.CENTER);
-		vbox.getChildren().addAll(cont, startGame, back);
+    private Scene createGame() {
 
-		cont.setTextAlignment(TextAlignment.CENTER);
-		root.getChildren().add(view);
-		root.setCenter(vbox);
+        try {
 
-		return controlScene;
+            // create lists
+            bulletList = new ArrayList<>();
+            playerList = new ArrayList<>();
+            starList = new ArrayList<>();
+            enemyList = new ArrayList<>();
+            backgroundList = new ArrayList<>();
+            statList = new ArrayList<>();
 
-	}
+            // create group node
+            gameGroup = new Group();
 
-	private Scene createGame() {
+            // create pane nodes
 
-		try {
+            statsField = new Pane();
+            backgroundField = new Pane();
+            lowerDustField = new Pane();
+            bulletField = new Pane();
+            playField = new Pane();
+            upperDustField = new Pane();
 
-			// create lists
-			bulletList = new ArrayList<>();
-			playerList = new ArrayList<>();
-			starList = new ArrayList<>();
-			enemyList = new ArrayList<>();
-			backgroundList = new ArrayList<>();
-			statList = new ArrayList<>();
+            rnd = new Random();
 
-			// create group node
-			gameGroup = new Group();
+            gameGroup.getChildren().add(backgroundField);
+            gameGroup.getChildren().add(bulletField);
+            gameGroup.getChildren().add(playField);
+            gameGroup.getChildren().add(lowerDustField);
+            gameGroup.getChildren().add(upperDustField);
+            gameGroup.getChildren().add(statsField);
 
-			// create pane nodes
+            Scene gameScene = new Scene(gameGroup, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
 
-			statsField = new Pane();
-			backgroundField = new Pane();
-			lowerDustField = new Pane();
-			bulletField = new Pane();
-			playField = new Pane();
-			upperDustField = new Pane();
+            createFirst(gameScene);
 
-			rnd = new Random();
+            // createDebugInterface();
 
-			gameGroup.getChildren().add(backgroundField);
-			gameGroup.getChildren().add(bulletField);
-			gameGroup.getChildren().add(playField);
-			gameGroup.getChildren().add(lowerDustField);
-			gameGroup.getChildren().add(upperDustField);
-			gameGroup.getChildren().add(statsField);
+            createGameLoop();
 
-			Scene gameScene = new Scene(gameGroup, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
+            startGame();
+            return gameScene;
 
-			createFirst(gameScene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
 
-			// createDebugInterface();
+    }
 
-			createGameLoop();
+    private void createFirst(Scene scene) {
 
-			startGame();
-			return gameScene;
+        loadResources();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+        createBackground();
 
-	}
+        createPlayer(scene);
 
-	private void createFirst(Scene scene) {
+        createStatUi();
 
-		loadResources();
+    }
 
-		createBackground();
+    private void createPlayer(Scene scene) {
 
-		createPlayer(scene);
+        // player input
+        input = new Input(scene);
+        // add input listener
+        input.addListener();
 
-		createStatUi();
+        Image image = playerShip;
 
-	}
+        // center player on screen
+        float x = (float) (Settings.SCENE_WIDTH - image.getWidth() * 3.7f);
+        float y = Settings.SCENE_HEIGHT * 0.7f;
 
-	private void createPlayer(Scene scene) {
+        player = new Player(playField, playerShip, x, y, 0f, 0f, 0f, 0f, Settings.PLAYER_SHIP_HEALTH, 0.5f,
+                Settings.PLAYER_SHIP_SPEED, input);
+        playerList.add(player);
 
-		// player input
-		input = new Input(scene);
-		// add input listener
-		input.addListener();
+    }
 
-		Image image = playerShip;
+    private void createBackground() {
 
-		// center player on screen
-		float x = (float) (Settings.SCENE_WIDTH - image.getWidth() * 3.7f);
-		float y = Settings.SCENE_HEIGHT * 0.7f;
+        Image image = backgroundImage;
 
-		player = new Player(playField, playerShip, x, y, 0f, 0f, 0f, 0f, Settings.PLAYER_SHIP_HEALTH, 0.5f,
-				Settings.PLAYER_SHIP_SPEED, input);
-		playerList.add(player);
+        float x = 0;
+        float y = (float) (-image.getHeight() + Settings.SCENE_HEIGHT);
 
-	}
+        Background background = new Background(backgroundImage, backgroundField, x, y, Settings.BACKGROUND_SPEED);
 
-	private void createBackground() {
+        backgroundList.add(background);
 
-		Image image = backgroundImage;
+    }
 
-		float x = 0;
-		float y = (float) (-image.getHeight() + Settings.SCENE_HEIGHT);
+    /*
+    Create Star dust is not working atm
+     */
+    private void createStarDust(boolean random) {
 
-		Background background = new Background(backgroundImage, backgroundField, x, y, Settings.BACKGROUND_SPEED);
+        if (random && rnd.nextInt(Settings.STAR_SPAWN_RANDOMNESS) != 0) {
+            return;
+        }
 
-		backgroundList.add(background);
+        Pane pane;
+        Image image;
+        float speed;
+        float opacity;
+        float x;
+        float y;
 
-	}
+        // random pane for dust particles also set different opacity depending
+        // on pane
+        if (rnd.nextInt(2) == 0) {
+            pane = lowerDustField;
+            opacity = 0.1f;
+            speed = rnd.nextFloat() * 1.0f + 1.0f;
+        } else {
+            pane = upperDustField;
+            opacity = 0.01f;
+            speed = rnd.nextFloat() * 1.0f + 2.0f;
+        }
 
-	private void createStarDust(boolean random) {
+        image = starDust[rnd.nextInt(starDust.length)];
 
-		if (random && rnd.nextInt(Settings.STAR_SPAWN_RANDOMNESS) != 0) {
-			return;
-		}
+        x = (float) (rnd.nextFloat() * Settings.SCENE_WIDTH - image.getWidth() / 2.0f);
 
-		Pane pane;
-		Image image;
-		float speed;
-		float opacity;
-		float x;
-		float y;
+        y = (float) -image.getHeight();
 
-		// random pane for dust particles also set different opacity depending
-		// on pane
-		if (rnd.nextInt(2) == 0) {
-			pane = lowerDustField;
-			opacity = 0.1f;
-			speed = rnd.nextFloat() * 1.0f + 1.0f;
-		} else {
-			pane = upperDustField;
-			opacity = 0.01f;
-			speed = rnd.nextFloat() * 1.0f + 2.0f;
-		}
+        StarDust starDust = new StarDust(pane, image, x, y, speed, opacity);
 
-		image = starDust[rnd.nextInt(starDust.length)];
+        starList.add(starDust);
 
-		x = (float) (rnd.nextFloat() * Settings.SCENE_WIDTH - image.getWidth() / 2.0f);
+    }
 
-		y = (float) -image.getHeight();
+    private Scene createHighScore() {
 
-		StarDust starDust = new StarDust(pane, image, x, y, speed, opacity);
+        manageScore.updateScoreFile();
+        BorderPane root = new BorderPane();
+        Scene highScene = new Scene(root, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
+        ImageView view = new ImageView(getClass().getResource("/images/space650x800y.jpg").toExternalForm());
 
-		starList.add(starDust);
+        Font fonth = new Font("Verdana", 20);
 
-	}
+        Text highsc = new Text(manageScore.getHighScore());
 
-	private Scene createHighScore() {
+        highsc.setFont(fonth);
+        Font font = new Font("Verdana", 40);
+        Text high = new Text("Top 10");
+        Text back = new Text("Go Back");
 
-		manageScore.updateScoreFile();
-		BorderPane root = new BorderPane();
-		Scene highScene = new Scene(root, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
-		ImageView view = new ImageView(getClass().getResource("/images/space650x800y.jpg").toExternalForm());
+        VBox vbox = new VBox(50);
 
-		Font fonth = new Font("Verdana", 20);
+        high.setFill(Color.CHOCOLATE);
+        high.setFont(font);
+        back.setFont(font);
+        back.setFill(Color.CHOCOLATE);
+        changeColor(back);
 
-		Text highsc = new Text(manageScore.getHighscoreString());
+        back.setOnMousePressed(e -> {
+            mainScene = createMenu();
+            thisStage.setScene(mainScene);
 
-		highsc.setFont(fonth);
-		Font font = new Font("Verdana", 40);
-		Text high = new Text("Top 10");
-		Text back = new Text("Go Back");
+        });
 
-		VBox vbox = new VBox(50);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.getChildren().addAll(high, highsc, back);
 
-		high.setFill(Color.CHOCOLATE);
-		high.setFont(font);
-		back.setFont(font);
-		back.setFill(Color.CHOCOLATE);
-		changeColor(back);
+        root.getChildren().add(view);
+        root.setCenter(vbox);
+        return highScene;
 
-		back.setOnMousePressed(e -> {
-			mainScene = createMenu();
-			thisStage.setScene(mainScene);
+    }
 
-		});
+    private Scene createGameOver() {
+        BorderPane root = new BorderPane();
+        Scene overScene = new Scene(root, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
+        ImageView view = new ImageView(getClass().getResource("/images/space650x800y.jpg").toExternalForm());
+        Font font = new Font("Verdana", 40);
 
-		vbox.setAlignment(Pos.CENTER);
-		vbox.getChildren().addAll(high, highsc, back);
+        TextField writeName = new TextField();
+        Text name = new Text("Write your name");
+        Text exit = new Text("Exit");
+        Text startGame = new Text("Start Game");
 
-		root.getChildren().add(view);
-		root.setCenter(vbox);
-		return highScene;
+        Button submit = new Button("Submit");
 
-	}
+        VBox vbox = new VBox(50);
 
-	private Scene createGameOver() {
-		BorderPane root = new BorderPane();
-		Scene overScene = new Scene(root, Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
-		ImageView view = new ImageView(getClass().getResource("/images/space650x800y.jpg").toExternalForm());
-		Font font = new Font("Verdana", 40);
+        writeName.setMaxSize(180, 40);
+        writeName.setPromptText("enter name");
 
-		TextField writeName = new TextField();
-		Text name = new Text("Write your name");
-		Text exit = new Text("Exit");
-		Text startGame = new Text("Start Game");
+        writeName.setStyle("-fx-control-inner-background: chocolate; -fx-text-fill: black; -fx-font-size: 14;");
 
-		Button submit = new Button("Submit");
+        name.setFont(font);
+        name.setFill(Color.CHOCOLATE);
+        startGame.setFont(font);
+        startGame.setFill(Color.CHOCOLATE);
+        submit.setFont(Font.font("Arial Black", 20));
+        submit.setStyle("-fx-base: chocolate");
+        exit.setFont(font);
+        exit.setFill(Color.CHOCOLATE);
+        changeColor(startGame);
+        changeColor(exit);
 
-		VBox vbox = new VBox(50);
+        exit.setOnMousePressed(e -> Platform.exit());
 
-		writeName.setMaxSize(180, 40);
-		writeName.setPromptText("enter name");
+        startGame.setOnMousePressed(e -> {
+            mainScene = createGame();
+            thisStage.setScene(mainScene);
 
-		writeName.setStyle("-fx-control-inner-background: chocolate; -fx-text-fill: black; -fx-font-size: 14;");
+        });
 
-		name.setFont(font);
-		name.setFill(Color.CHOCOLATE);
-		startGame.setFont(font);
-		startGame.setFill(Color.CHOCOLATE);
-		submit.setFont(Font.font("Arial Black", 20));
-		submit.setStyle("-fx-base: chocolate");
-		exit.setFont(font);
-		exit.setFill(Color.CHOCOLATE);
-		changeColor(startGame);
-		changeColor(exit);
+        submit.setOnAction(e -> {
 
-		exit.setOnMousePressed(e -> {
-			Platform.exit();
+            manageScore.addScore(writeName.getText(), score);
+            mainScene = createHighScore();
+            thisStage.setScene(mainScene);
 
-		});
+        });
 
-		startGame.setOnMousePressed(e -> {
-			mainScene = createGame();
-			thisStage.setScene(mainScene);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.getChildren().addAll(name, writeName, submit, startGame, exit);
 
-		});
+        root.getChildren().add(view);
+        root.setCenter(vbox);
 
-		submit.setOnAction(e -> {
+        return overScene;
+    }
 
-			manageScore.addScore(writeName.getText(), score);
-			mainScene = createHighScore();
-			thisStage.setScene(mainScene);
+    private void spawnEnemies(boolean random) {
 
-		});
+        Image image = enemyShip;
+        Image image2 = enemyShip2;
+        Image image3 = enemyShip3;
+        Image image4 = enemyShip4;
+        int randomShip = rnd.nextInt(100);
+        // spawn rate
+        if (random && rnd.nextInt(Settings.ENEMY_SPAWN_RATE) != 0) {
+            return;
+        }
 
-		vbox.setAlignment(Pos.CENTER);
-		vbox.getChildren().addAll(name, writeName, submit, startGame, exit);
+        // random speed
+        float speed = rnd.nextFloat() * 1.0f + 3.0f;
+        float speed2 = rnd.nextFloat() + 1.0f;
 
-		root.getChildren().add(view);
-		root.setCenter(vbox);
+        // x make sure enemies always are inside the game and no parts outside
+        // y spawn right on top of the screen
 
-		return overScene;
-	}
+        float x = (float) (rnd.nextFloat() * (Settings.SCENE_WIDTH - image.getWidth() / 1.2f));
+        float x2 = (float) (rnd.nextFloat() * (Settings.SCENE_WIDTH - image2.getWidth()));
+        float x3 = (float) (rnd.nextFloat() * (Settings.SCENE_WIDTH - image3.getWidth()));
+        float x4 = (float) (rnd.nextFloat() * (Settings.SCENE_WIDTH - image4.getWidth()));
 
-	private void spawnEnemies(boolean random) {
+        float y = (float) -image.getHeight();
+        float y2 = (float) -image2.getHeight();
+        float y3 = (float) -image3.getHeight();
+        float y4 = (float) -image4.getHeight();
 
-		Image image = enemyShip;
-		Image image2 = enemyShip2;
-		Image image3 = enemyShip3;
-		Image image4 = enemyShip4;
-		int randomShip = rnd.nextInt(100);
-		// spawn rate
-		if (random && rnd.nextInt(Settings.ENEMY_SPAWN_RATE) != 0) {
-			return;
-		}
+        Enemy enemy1 = new Enemy(playField, image, x, y, 0, 0, speed, 0, 5, 20, 100);
+        Enemy enemy2 = new Enemy(playField, image2, x2, y2, 0, 0, speed, 0, 40, 4, 200);
+        Enemy enemy3 = new Enemy(playField, image3, x3, y3, 0, 0, speed2, 0, 90, 5, 300);
+        Enemy enemy4 = new Enemy(playField, image4, x4, y4, 0, 0, speed2, 0, 150, 10, 600);
 
-		// random speed
-		float speed = rnd.nextFloat() * 1.0f + 3.0f;
-		float speed2 = rnd.nextFloat() + 1.0f;
+        // random sprite and add sprite
+        if (randomShip >= 70) {
+            enemyList.add(enemy1);
+        } else if (randomShip < 69 && randomShip >= 29) {
+            enemyList.add(enemy2);
+        } else if (randomShip < 28 && randomShip >= 10) {
+            enemyList.add(enemy3);
+        } else {
+            enemyList.add(enemy4);
+        }
+    }
 
-		// x make sure enemies always are inside the game and no parts outside
-		// y spawn right on top of the screen
+    private void spawnPrimaryWeapon(Player player) {
 
-		float x = (float) (rnd.nextFloat() * (Settings.SCENE_WIDTH - image.getWidth() / 1.2f));
-		float x2 = (float) (rnd.nextFloat() * (Settings.SCENE_WIDTH - image2.getWidth()));
-		float x3 = (float) (rnd.nextFloat() * (Settings.SCENE_WIDTH - image3.getWidth()));
-		float x4 = (float) (rnd.nextFloat() * (Settings.SCENE_WIDTH - image4.getWidth()));
+        player.primaryWeaponCharge();
 
-		float y = (float) -image.getHeight();
-		float y2 = (float) -image2.getHeight();
-		float y3 = (float) -image3.getHeight();
-		float y4 = (float) -image4.getHeight();
+        if (player.firePrimaryWeapon()) {
+            Bullet bullet;
 
-		Enemy enemy1 = new Enemy(playField, image, x, y, 0, 0, speed, 0, 5, 20, 100);
-		Enemy enemy2 = new Enemy(playField, image2, x2, y2, 0, 0, speed, 0, 40, 4, 200);
-		Enemy enemy3 = new Enemy(playField, image3, x3, y3, 0, 0, speed2, 0, 90, 5, 300);
-		Enemy enemy4 = new Enemy(playField, image4, x4, y4, 0, 0, speed2, 0, 150, 10, 600);
+            Image image = playerBullet;
 
-		// random sprite and add sprite
-		if (randomShip >= 70) {
-			enemyList.add(enemy1);
-		} else if (randomShip <= 69 && randomShip >= 39) {
-			enemyList.add(enemy2);
-		} else if (randomShip <= 38 && randomShip >= 10) {
-			enemyList.add(enemy3);
-		} else {
-			enemyList.add(enemy4);
-		}
-	}
+            // weapons rightX bullets from the right side of ship center leftX
+            // left center side
+            // and x middle bullet
 
-	private void spawnPrimaryWeapon(Player player) {
+            float rightX = (float) (player.getPrimaryWeaponRightX() - image.getWidth() / 2.0f);
+            float x = (float) (player.getPrimaryWeaponX() - image.getWidth() / 2.0f);
 
-		player.primaryWeaponCharge();
+            float leftX = (float) (player.getPrimaryWeaponLeftX() - image.getWidth() / 2.0f);
 
-		if (player.firePrimaryWeapon()) {
-			Bullet bullet;
+            float y = player.getPrimaryWeaponY() - 30;
 
-			Image image = playerBullet;
+            float spread = player.getPrimaryWeaponBulletSpread();
+            float count = player.getPrimaryWeaponBulletCount();
+            float speed = player.getPrimaryWeaponBulletSpeed();
 
-			// weapons rightX bullets from the right side of ship center leftX
-			// left center side
-			// and x middle bullet
+            // create sprite middle shot
 
-			float rightX = (float) (player.getPrimaryWeaponRightX() - image.getWidth() / 2.0f);
-			float x = (float) (player.getPrimaryWeaponX() - image.getWidth() / 2.0f);
+            bullet = new Bullet(bulletField, image, x, y, 0, 0, -speed, 0, 1, 1);
+            bulletList.add(bullet);
 
-			float leftX = (float) (player.getPrimaryWeaponLeftX() - image.getWidth() / 2.0f);
+            // left/right: vary x-axis position
+            for (int i = 0; i < count / 2.0; i++) {
 
-			float y = player.getPrimaryWeaponY() - 30;
+                // left shot
+                bullet = new Bullet(bulletField, image, leftX, y, 0, -spread * i, -speed, 0, 1, 1);
 
-			float spread = player.getPrimaryWeaponBulletSpread();
-			float count = player.getPrimaryWeaponBulletCount();
-			float speed = player.getPrimaryWeaponBulletSpeed();
+                bulletList.add(bullet);
 
-			// create sprite middle shot
+                // right shot
+                bullet = new Bullet(bulletField, image, rightX, y, 0, spread * i, -speed, 0, 1, 1);
 
-			bullet = new Bullet(bulletField, image, x, y, 0, 0, -speed, 0, 1, 1);
-			bulletList.add(bullet);
+                bulletList.add(bullet);
 
-			// left/right: vary x-axis position
-			for (int i = 0; i < count / 2.0; i++) {
+            }
 
-				// left shot
-				bullet = new Bullet(bulletField, image, leftX, y, 0, -spread * i, -speed, 0, 1, 1);
+            player.primaryWeaponUncharge();
 
-				bulletList.add(bullet);
+        }
 
-				// right shot
-				bullet = new Bullet(bulletField, image, rightX, y, 0, spread * i, -speed, 0, 1, 1);
+    }
 
-				bulletList.add(bullet);
+    private void spawnExplosion(SpriteBuild sprite) {
+        Explosion exp = new Explosion(playField, sprite, explosionSeq, 400);
+        exp.play();
+    }
 
-			}
+    private void createStatUi() {
+        stats = new Stats(player);
 
-			player.primaryWeaponUncharge();
+        stats.prefWidthProperty().bind(thisStage.getScene().widthProperty());
 
-		}
+        statsField.getChildren().add(stats);
 
-	}
+        statList.add(stats);
 
-	private void spawnExplosion(SpriteBuild sprite) {
-		Explosion exp = new Explosion(playField, sprite, explosionSeq, 400);
-		exp.play();
-	}
+    }
 
-	private void createStatUi() {
-		stats = new Stats(player);
+    private void updateScoreUi() {
 
-		stats.prefWidthProperty().bind(thisStage.getScene().widthProperty());
+        stats.updateUI();
 
-		statsField.getChildren().add(stats);
+    }
 
-		statList.add(stats);
+    private void spawnScore(SpriteBuild sprite, int sc) {
+        TransText score = new TransText(playField, sprite, 5000, sc);
+        score.play();
 
-	}
+    }
 
-	private void updateScoreUi() {
+    private void loadResources() {
 
-		stats.updateUI();
+        // explosion image
+        explosionSeq = new Image[6];
+        explosionSeq[0] = new Image(getClass().getResource("/eximage/Ex_A10.png").toExternalForm());
+        explosionSeq[1] = new Image(getClass().getResource("/eximage/Ex_A11.png").toExternalForm());
+        explosionSeq[2] = new Image(getClass().getResource("/eximage/Ex_A12.png").toExternalForm());
+        explosionSeq[3] = new Image(getClass().getResource("/eximage/Ex_A13.png").toExternalForm());
+        explosionSeq[4] = new Image(getClass().getResource("/eximage/Ex_A14.png").toExternalForm());
+        explosionSeq[5] = new Image(getClass().getResource("/eximage/Ex_A15.png").toExternalForm());
 
-	}
+        // enemy image
+        enemyShip = new Image(getClass().getResource("/images/ship2fd.png").toExternalForm());
+        enemyShip2 = new Image(getClass().getResource("/images/ship3fd.png").toExternalForm());
+        enemyShip3 = new Image(getClass().getResource("/images/ship4fd.png").toExternalForm());
+        enemyShip4 = new Image(getClass().getResource("/images/ship5fd.png").toExternalForm());
 
-	private void spawnScore(SpriteBuild sprite, int sc) {
-		TransText score = new TransText(playField, sprite, 5000, sc);
-		score.play();
+        // bullet image
+        playerBullet = new Image(getClass().getResource("/images/bullet3.png").toExternalForm());
 
-	}
+        // dust particles
+        starDust = new Image[4];
+        starDust[0] = new Image(getClass().getResource("/images/tests3.png").toExternalForm());
+        starDust[1] = new Image(getClass().getResource("/images/tests3.png").toExternalForm());
+        starDust[2] = new Image(getClass().getResource("/images/tests3.png").toExternalForm());
+        starDust[3] = new Image(getClass().getResource("/images/tests3.png").toExternalForm());
 
-	private void loadResources() {
+        // get background
+        backgroundImage = new Image(getClass().getResource("/images/space650x800y.jpg").toExternalForm());
 
-		// explosion image
-		explosionSeq = new Image[6];
-		explosionSeq[0] = new Image(getClass().getResource("/eximage/Ex_A10.png").toExternalForm());
-		explosionSeq[1] = new Image(getClass().getResource("/eximage/Ex_A11.png").toExternalForm());
-		explosionSeq[2] = new Image(getClass().getResource("/eximage/Ex_A12.png").toExternalForm());
-		explosionSeq[3] = new Image(getClass().getResource("/eximage/Ex_A13.png").toExternalForm());
-		explosionSeq[4] = new Image(getClass().getResource("/eximage/Ex_A14.png").toExternalForm());
-		explosionSeq[5] = new Image(getClass().getResource("/eximage/Ex_A15.png").toExternalForm());
+        // ship image
+        playerShip = new Image(getClass().getResource("/images/shipfu.png").toExternalForm());
 
-		// enemy image
-		enemyShip = new Image(getClass().getResource("/images/ship2fd.png").toExternalForm());
-		enemyShip2 = new Image(getClass().getResource("/images/ship3fd.png").toExternalForm());
-		enemyShip3 = new Image(getClass().getResource("/images/ship4fd.png").toExternalForm());
-		enemyShip4 = new Image(getClass().getResource("/images/ship5fd.png").toExternalForm());
+    }
 
-		// bullet image
-		playerBullet = new Image(getClass().getResource("/images/bullet3.png").toExternalForm());
+    private void moveSprites(List<? extends SpriteBuild> spriteList) {
+        for (SpriteBuild sprite : spriteList) {
+            sprite.move();
+        }
+    }
 
-		// dust particles
-		starDust = new Image[4];
-		starDust[0] = new Image(getClass().getResource("/images/tests3.png").toExternalForm());
-		starDust[1] = new Image(getClass().getResource("/images/tests3.png").toExternalForm());
-		starDust[2] = new Image(getClass().getResource("/images/tests3.png").toExternalForm());
-		starDust[3] = new Image(getClass().getResource("/images/tests3.png").toExternalForm());
+    private void updateSprites(List<? extends SpriteBuild> spriteList) {
+        for (SpriteBuild sprite : spriteList) {
+            sprite.update();
+        }
+    }
 
-		// get background
-		backgroundImage = new Image(getClass().getResource("/images/space650x800y.jpg").toExternalForm());
+    private void checkIfRemovable(List<? extends SpriteBuild> spriteList) {
+        for (SpriteBuild sprite : spriteList) {
+            sprite.checkIfRemovable();
+        }
+    }
 
-		// ship image
-		playerShip = new Image(getClass().getResource("/images/shipfu.png").toExternalForm());
+    private void removeSprites(List<? extends SpriteBuild> spriteList) {
+        Iterator<? extends SpriteBuild> iterator = spriteList.iterator();
+        while (iterator.hasNext()) {
+            SpriteBuild sprite = iterator.next();
+            if (sprite.isRemovable()) {
 
-	}
+                sprite.removeFromPane();
 
-	private void moveSprites(List<? extends SpriteBuild> spriteList) {
-		for (SpriteBuild sprite : spriteList) {
-			sprite.move();
-		}
-	}
+                iterator.remove();
 
-	private void updateSprites(List<? extends SpriteBuild> spriteList) {
-		for (SpriteBuild sprite : spriteList) {
-			sprite.update();
-		}
-	}
+            }
+        }
 
-	private void checkIfRemovable(List<? extends SpriteBuild> spriteList) {
-		for (SpriteBuild sprite : spriteList) {
-			sprite.checkIfRemovable();
-		}
-	}
+    }
 
-	private void removeSprites(List<? extends SpriteBuild> spriteList) {
-		Iterator<? extends SpriteBuild> iterator = spriteList.iterator();
-		while (iterator.hasNext()) {
-			SpriteBuild sprite = iterator.next();
-			if (sprite.isRemovable()) {
+    private void bulletCollisionCheck(List<? extends SpriteBuild> bulletCollisionList) {
 
-				sprite.removeFromPane();
+        for (SpriteBuild bullet : bulletCollisionList) {
+            for (Enemy enemy : enemyList) {
 
-				iterator.remove();
+                if (!enemy.isAlive())
+                    continue;
+                if (bullet.collideDetect(enemy)) {
 
-			}
-		}
+                    // inflict damage
+                    enemy.getDamagedBy(bullet);
 
-	}
+                    if (!enemy.isAlive()) {
 
-	private void bulletCollisionCheck(List<? extends SpriteBuild> bulletCollisionList) {
+                        enemy.stopMovement();
+                        spawnScore(enemy, enemy.getPoints());
 
-		for (SpriteBuild bullet : bulletCollisionList) {
-			for (Enemy enemy : enemyList) {
+                        spawnExplosion(enemy);
 
-				if (!enemy.isAlive())
-					continue;
-				if (bullet.collideDetect(enemy)) {
+                        player.addScore(enemy.getPoints());
 
-					// inflict damage
-					enemy.getDamagedBy(bullet);
+                    }
 
-					if (!enemy.isAlive()) {
+                    bullet.kill();
 
-						enemy.stopMovement();
-						spawnScore(enemy, enemy.getPoints());
+                    // remove bullet
+                    bullet.remove();
+                }
+            }
+        }
 
-						spawnExplosion(enemy);
+    }
 
-						player.addScore(enemy.getPoints());
+    private void shipCollisionCheck() {
+        for (Player player : playerList) {
+            for (Enemy enemy : enemyList) {
+                if (player.collideDetect(enemy)) {
 
-					}
+                    // player takes damage by enemy collision
+                    player.getDamagedBy(enemy);
 
-					bullet.kill();
+                    // enemy takes damage by collision
+                    enemy.getDamagedBy(player);
 
-					// remove bullet
-					bullet.remove();
-				}
-			}
-		}
+                    if (!enemy.isAlive()) {
+                        enemy.stopMovement();
+                        spawnExplosion(enemy);
+                        spawnScore(enemy, enemy.getPoints());
+                        player.addScore(enemy.getPoints());
 
-	}
+                        enemy.remove();
+                    }
+                    if (!player.isAlive()) {
+                        spawnExplosion(player);
+                        gameStop();
+                    }
 
-	private void shipCollisionCheck() {
-		for (Player player : playerList) {
-			for (Enemy enemy : enemyList) {
-				if (player.collideDetect(enemy)) {
+                }
+            }
+        }
+    }
 
-					// player takes damage by enemy collision
-					player.getDamagedBy(enemy);
+    private void startGame() {
+        gameLoop.start();
 
-					// enemy takes damage by collision
-					enemy.getDamagedBy(player);
+    }
 
-					if (!enemy.isAlive()) {
-						enemy.stopMovement();
-						spawnExplosion(enemy);
-						spawnScore(enemy, enemy.getPoints());
-						player.addScore(enemy.getPoints());
+    private void gamePause() {
+        gamePause = true;
+        gameLoop.stop();
+    }
 
-						enemy.remove();
-					}
-					if (!player.isAlive()) {
-						spawnExplosion(player);
-						gameStop();
-					}
+    private void gameResume() {
+        gamePause = false;
+        gameLoop.start();
 
-				}
-			}
-		}
-	}
+    }
 
-	private void startGame() {
-		gameLoop.start();
+    private void gameStop() {
+        score = player.getScore();
+        gameLoop.stop();
+        input.removeListener();
 
-	}
+        gameGroup.getChildren().removeAll(gameGroup.getChildren());
+        mainScene = createGameOver();
+        thisStage.setScene(mainScene);
 
-	private void gamePause() {
-		gamePause = true;
-		gameLoop.stop();
-	}
+    }
 
-	private void gameResume() {
-		gamePause = false;
-		gameLoop.start();
+    private EventHandler<KeyEvent> globalKeyEvent = new EventHandler<>() {
 
-	}
+        @Override
+        public void handle(KeyEvent event) {
 
-	private void gameStop() {
-		score = player.getScore();
-		gameLoop.stop();
-		input.removeListener();
+            // toggle pause
+            if (event.getCode() == KeyCode.P) {
 
-		gameGroup.getChildren().removeAll(gameGroup.getChildren());
-		mainScene = createGameOver();
-		thisStage.setScene(mainScene);
+                if (gamePause) {
+                    gameResume();
+                } else {
+                    gamePause();
+                }
 
-	}
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+                gameStop();
+                mainScene = createMenu();
+                thisStage.setScene(mainScene);
+            }
+        }
+    };
 
-	private EventHandler<KeyEvent> globalKeyEvent = new EventHandler<KeyEvent>() {
+    private void createGameLoop() {
+        gameLoop = new AnimationTimer() {
 
-		@Override
-		public void handle(KeyEvent event) {
+            @Override
+            public void handle(long now) {
 
-			// toggle pause
-			if (event.getCode() == KeyCode.P) {
+                // add input for player
+                for (Player player : playerList) {
+                    player.initInput();
+                }
 
-				if (gamePause) {
-					gameResume();
-				} else {
-					gamePause();
-				}
+                // add random enemies and stars
+                spawnEnemies(true);
+                //	createStarDust(true);
 
-			} else if (event.getCode() == KeyCode.ESCAPE) {
-				gameStop();
-				mainScene = createMenu();
-				thisStage.setScene(mainScene);
-			}
-		}
-	};
+                // spawn bullets of player
+                for (Player player : playerList) {
+                    spawnPrimaryWeapon(player);
 
-	private void createGameLoop() {
-		gameLoop = new AnimationTimer() {
+                }
 
-			@Override
-			public void handle(long now) {
+                thisStage.addEventFilter(KeyEvent.KEY_RELEASED, globalKeyEvent);
+                // move sprite
+                moveSprites(playerList);
+                moveSprites(backgroundList);
+                moveSprites(bulletList);
+                moveSprites(enemyList);
+                moveSprites(starList);
 
-				// add input for player
-				for (Player player : playerList) {
-					player.initInput();
-				}
+                // update sprite
+                updateSprites(backgroundList);
+                updateSprites(playerList);
+                updateSprites(bulletList);
+                updateSprites(starList);
+                updateSprites(enemyList);
 
-				// add random enemies and stars
-				spawnEnemies(true);
-				createStarDust(true);
+                // check collision
+                bulletCollisionCheck(bulletList);
+                shipCollisionCheck();
 
-				// spawn bullets of player
-				for (Player player : playerList) {
-					spawnPrimaryWeapon(player);
+                // check if sprite can be removed
+                checkIfRemovable(bulletList);
+                checkIfRemovable(starList);
+                checkIfRemovable(enemyList);
 
-				}
+                // remove sprite
+                removeSprites(bulletList);
+                removeSprites(starList);
+                removeSprites(enemyList);
 
-				thisStage.addEventFilter(KeyEvent.KEY_RELEASED, globalKeyEvent);
-				// move sprite
-				moveSprites(playerList);
-				moveSprites(backgroundList);
-				moveSprites(bulletList);
-				moveSprites(enemyList);
-				moveSprites(starList);
+                // update score and health
+                updateScoreUi();
 
-				// update sprite
-				updateSprites(backgroundList);
-				updateSprites(playerList);
-				updateSprites(bulletList);
-				updateSprites(starList);
-				updateSprites(enemyList);
+            }
+        };
 
-				// check collision
-				bulletCollisionCheck(bulletList);
-				shipCollisionCheck();
+    }
 
-				// check if sprite can be removed
-				checkIfRemovable(bulletList);
-				checkIfRemovable(starList);
-				checkIfRemovable(enemyList);
-
-				// remove sprite
-				removeSprites(bulletList);
-				removeSprites(starList);
-				removeSprites(enemyList);
-
-				// update score and health
-				updateScoreUi();
-
-			}
-		};
-
-	}
-
-	public static void main(String[] args) {
-		launch(args);
-	}
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

@@ -8,39 +8,39 @@ import javafx.util.Duration;
 
 public class AnimationBuild extends Transition {
 
-	private final ImageView imageView;
-	private final int count;
+    private final ImageView imageView;
+    private final int count;
 
-	private int lastIndex;
+    private int lastIndex;
 
-	private Image[] sequence;
+    private Image[] sequence;
 
-	public AnimationBuild(Image[] sequence, double durationMs) {
+    AnimationBuild(Image[] sequence, double durationMs) {
 
-		this.imageView = new ImageView(sequence[0]);
-		this.sequence = sequence;
-		this.count = sequence.length;
+        this.imageView = new ImageView(sequence[0]);
+        this.sequence = sequence;
+        this.count = sequence.length;
 
-		setCycleCount(1);
-		setCycleDuration(Duration.millis(durationMs));
-		setInterpolator(Interpolator.LINEAR);
+        setCycleCount(1);
+        setCycleDuration(Duration.millis(durationMs));
+        setInterpolator(Interpolator.LINEAR);
 
-	}
+    }
 
-	@Override
-	protected void interpolate(double x) {
+    @Override
+    protected void interpolate(double x) {
 
-		final int index = (int) Math.min(Math.floor(x * count), count - 1);
+        final int index = (int) Math.min(Math.floor(x * count), count - 1);
 
-		if (index != lastIndex) {
-			imageView.setImage(sequence[index]);
-			lastIndex = index;
-		}
+        if (index != lastIndex) {
+            imageView.setImage(sequence[index]);
+            lastIndex = index;
+        }
 
-	}
+    }
 
-	public ImageView getView() {
-		return imageView;
-	}
+    ImageView getView() {
+        return imageView;
+    }
 
 }

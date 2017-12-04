@@ -12,52 +12,52 @@ import javafx.scene.text.Text;
 
 public class Stats extends StackPane {
 
-	Player player;
+    private Player player;
 
-	HealthBar healthBar;
-	Text scoreText;
+    private HealthBar healthBar;
+    private Text scoreText;
 
-	public Stats(Player player) {
+    Stats(Player player) {
 
-		this.player = player;
+        this.player = player;
 
-		setPadding(new Insets(2));
+        setPadding(new Insets(2));
 
-		// health bar
-		healthBar = new HealthBar();
-		StackPane.setAlignment(healthBar, Pos.TOP_LEFT);
-		StackPane.setMargin(healthBar, new Insets(6, 0, 0, 6));
+        // health bar
+        healthBar = new HealthBar();
+        StackPane.setAlignment(healthBar, Pos.TOP_LEFT);
+        StackPane.setMargin(healthBar, new Insets(6, 0, 0, 6));
 
-		getChildren().add(healthBar);
+        getChildren().add(healthBar);
 
-		// score
-		scoreText = new Text();
-		scoreText.setFont(Font.font("Verdana", FontWeight.BOLD, 36));
-		scoreText.setStroke(Color.BLACK);
-		scoreText.setFill(Color.WHITE);
+        // score
+        scoreText = new Text();
+        scoreText.setFont(Font.font("Verdana", FontWeight.BOLD, 36));
+        scoreText.setStroke(Color.BLACK);
+        scoreText.setFill(Color.WHITE);
 
-		StackPane.setAlignment(scoreText, Pos.TOP_CENTER);
+        StackPane.setAlignment(scoreText, Pos.TOP_CENTER);
 
-		getChildren().add(scoreText);
+        getChildren().add(scoreText);
 
-	}
+    }
 
-	public void updateUI() {
+    public void updateUI() {
 
-		// update health bar
-		healthBar.setValue(player.getCurrentHealth());
+        // update health bar
+        healthBar.setValue(player.getCurrentHealth());
 
-		// update score
-		scoreText.setText(NumberFormat.getInstance().format(player.getScore()));
+        // update score
+        scoreText.setText(NumberFormat.getInstance().format(player.getScore()));
 
-	}
+    }
 
-	public Text getScoreText() {
-		return scoreText;
-	}
+    public Text getScoreText() {
+        return scoreText;
+    }
 
-	public void setScoreText(Text scoreText) {
-		this.scoreText = scoreText;
-	}
+    public void setScoreText(Text scoreText) {
+        this.scoreText = scoreText;
+    }
 
 }

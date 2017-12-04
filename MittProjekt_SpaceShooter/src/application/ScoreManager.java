@@ -11,76 +11,78 @@ import java.util.Collections;
 
 public class ScoreManager {
 
-	private static final String HIGHSCORE_FILE = "highscore.txt";
+    private static final String HIGH_SCORE_FILE = "highscore.txt";
 
-	private ArrayList<Score> scores;
+    private ArrayList<Score> scores;
 
-	public ScoreManager() {
-		scores = new ArrayList<>();
-	}
+    ScoreManager() {
+        scores = new ArrayList<>();
+    }
 
-	public ArrayList<Score> getScores() {
-		loadFile();
-		sort();
-		return scores;
-	}
+    private ArrayList<Score> getScores() {
+        loadFile();
+        sort();
+        return scores;
+    }
 
-	private void sort() {
-		CompareScore comparator = new CompareScore();
-		Collections.sort(scores, comparator);
-	}
+    private void sort() {
+        CompareScore comparator = new CompareScore();
+        scores.sort(comparator);
+    }
 
-	public void addScore(String name, int score) {
-		loadFile();
-		scores.add(new Score(name, score));
-		updateScoreFile();
-	}
+    public void addScore(String name, int score) {
+        loadFile();
 
-	@SuppressWarnings("unchecked")
-	public void loadFile() {
-		try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(HIGHSCORE_FILE));) {
+        scores.add(new Score(name, score));
+        updateScoreFile();
+    }
 
-			scores = (ArrayList<Score>) inputStream.readObject();
+    @SuppressWarnings("unchecked")
+    public void loadFile() {
 
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found " + e.getMessage());
-		} catch (IOException e) {
-			System.out.println("I/O Error: " + e.getMessage());
-		} catch (ClassNotFoundException e) {
-			System.out.println("I/O Error: " + e.getMessage());
-		}
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(HIGH_SCORE_FILE))) {
 
-	}
+            scores = (ArrayList<Score>) inputStream.readObject();
 
-	public void updateScoreFile() {
-		try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(HIGHSCORE_FILE));) {
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println("I/O Error: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("I/O Error: " + e.getMessage());
+        }
 
-			outputStream.writeObject(scores);
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found " + e.getMessage());
-		} catch (IOException e) {
-			System.out.println("I/O Error: " + e.getMessage());
+    }
 
-		}
-	}
+    public void updateScoreFile() {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(HIGH_SCORE_FILE))) {
 
-	public String getHighscoreString() {
-		String highscore = "";
-		int maxScores = 10;
+            outputStream.writeObject(scores);
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("I/O Error: " + e.getMessage());
 
-		ArrayList<Score> scores;
-		scores = getScores();
+        }
+    }
 
-		int i = 0;
-		int x = scores.size();
-		if (x > maxScores) {
-			x = maxScores;
-		}
-		while (i < x) {
-			highscore += (i + 1) + "." + scores.get(i).getName() + "\t\t" + scores.get(i).getScore() + "\n";
-			i++;
-		}
-		return highscore;
-	}
+    public String getHighScore() {
+        StringBuilder highScore = new StringBuilder();
+        int maxScores = 10;
+
+        ArrayList<Score> scores;
+        scores = getScores();
+
+        int i = 0;
+        int x = scores.size();
+        if (x > maxScores) {
+            x = maxScores;
+        }
+        while (i < x) {
+            highScore.append(i + 1).append(".").append(scores.get(i).getName()).append("\t\t").append(scores.get(i).getScore()).append("\n");
+            i++;
+        }
+        return highScore.toString();
+    }
 
 }
