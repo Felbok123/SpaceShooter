@@ -1,17 +1,12 @@
 package application;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class ScoreManager {
 
-    private static final String HIGH_SCORE_FILE = "highscore.txt";
+    private static final String HIGH_SCORE_FILE = System.getProperty("user.dir") + File.separator + "highScore.txt";
 
     private ArrayList<Score> scores;
 
@@ -32,7 +27,6 @@ public class ScoreManager {
 
     public void addScore(String name, int score) {
         loadFile();
-
         scores.add(new Score(name, score));
         updateScoreFile();
     }
@@ -58,6 +52,7 @@ public class ScoreManager {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(HIGH_SCORE_FILE))) {
 
             outputStream.writeObject(scores);
+
         } catch (FileNotFoundException e) {
             System.out.println("File not found " + e.getMessage());
         } catch (IOException e) {

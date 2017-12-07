@@ -728,7 +728,7 @@ public class StartGame extends Application {
 
     }
 
-    private EventHandler<KeyEvent> globalKeyEvent = new EventHandler<>() {
+    private EventHandler<KeyEvent> globalKeyEvent = new EventHandler<KeyEvent>() {
 
         @Override
         public void handle(KeyEvent event) {
